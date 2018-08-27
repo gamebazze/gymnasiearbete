@@ -19,9 +19,9 @@ while True:
 
     values = line.split("|")
 
-    temp = values[1]
+    temp = values[1].replace('\r', '')
 
-    humidity = values[0]
+    humidity = values[0].replace('\r', '')
 
     date = datetime.datetime.now()
 
