@@ -10,10 +10,8 @@ mydb = mysql.connector.connect(
 )
 mycursor = mydb.cursor()
 
-ser = serial.Serial('/dev/ttyACM0', 9600, timeout=0.050)
+ser = serial.Serial('/dev/ttyACM0', 9600)
 while ser.in_waiting:
-
-    
     
     line = ser.readline()
 
