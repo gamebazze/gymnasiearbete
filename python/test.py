@@ -18,7 +18,7 @@ while True:
   if line:
 
     print "Data is comming"
-    
+
     values = line.split("|")
 
     temp = values[1]
@@ -33,6 +33,14 @@ while True:
     val = (temp, date_string)
     mycursor.execute(sql, val)
 
+    mydb.commit()
+
+    print(mycursor.rowcount, "record inserted.")
+
     sql = "INSERT INTO humidity (value, date) VALUES (%s, %s)"
     val = (humidity, date_string) 
     mycursor.execute(sql, val)
+
+    mydb.commit()
+
+    print(mycursor.rowcount, "record inserted.")
