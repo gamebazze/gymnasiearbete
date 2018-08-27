@@ -6,12 +6,14 @@ mydb = mysql.connector.connect(
   host="localhost",
   user="pi",
   passwd="raspberry",
-  database="wheater-station"
+  database="wheater_station"
 )
 mycursor = mydb.cursor()
 
 ser = serial.Serial('/dev/ttyACM0', 9600, timeout=0.050)
 while ser.in_waiting:
+
+    
     
     line = ser.readline()
 
@@ -25,10 +27,10 @@ while ser.in_waiting:
 
     date_string = date.strftime("%Y-%m-%d %H:%M")
 
-    sql = "INSERT INTO temperature (value, time) VALUES (%s, %s)"
+    sql = "INSERT INTO temperature (value, date) VALUES (%s, %s)"
     val = (temp, date_string)
     mycursor.execute(sql, val)
 
-    sql = "INSERT INTO humidity (value, time) VALUES (%s, %s)"
-    val = (humidity, date_string)
+    sql = "INSERT INTO humidity (value, date) VALUES (%s, %s)"
+    val = (humidity, date_string) 
     mycursor.execute(sql, val)
