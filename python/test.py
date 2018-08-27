@@ -33,7 +33,7 @@ while True:
     date_string = date.strftime("%Y-%m-%d %H:%M:%S")
 
     sql = "INSERT INTO temperature (value, date) VALUES (%s, %s)"
-    val = (temp, date_string)
+    val = (str(temp), date_string)
     mycursor.execute(sql, val)
 
     mydb.commit()
@@ -41,7 +41,7 @@ while True:
     print(mycursor.rowcount, "record inserted.")
 
     sql = "INSERT INTO humidity (value, date) VALUES (%s, %s)"
-    val = (humidity, date_string) 
+    val = (str(humidity), date_string) 
     mycursor.execute(sql, val)
 
     mydb.commit()
