@@ -25,9 +25,12 @@ while True:
 
     humidity = values[0]
 
+    print temp
+    print humidity
+
     date = datetime.datetime.now()
 
-    date_string = date.strftime("%Y-%m-%d %H:%M")
+    date_string = date.strftime("%Y-%m-%d %H:%M:%S")
 
     sql = "INSERT INTO temperature (value, date) VALUES (%s, %s)"
     val = (temp, date_string)
