@@ -1,0 +1,23 @@
+<html>
+    <head>
+        <title>Wheater Station</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="js/chart.js"></script>
+    </head>
+    <body>
+        <h1>Wheater Station</h1>
+        <form action="GET">
+            <select name="week">
+                <option value="35">Vecka 35</option>
+            </select>
+            <input type="submit" value="Visa">
+        </form>
+        <canvas id="myGraph" width="600" height="400"></canvas>
+        <script>
+            data = '{"data":[{"value":22}, {"value":23}, {"value":27}, {"value":28}, {"value":23}, {"value":21}, {"value":29}, {"value":25}, {"value":28}]}';
+            var chart = new Chart(document.getElementById("myGraph"));
+            chart.add_data(data);
+            chart.init();
+            console.log(chart);
+        </script>
+    </body>
