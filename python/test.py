@@ -11,26 +11,28 @@ mydb = mysql.connector.connect(
 mycursor = mydb.cursor()
 
 ser = serial.Serial('/dev/ttyACM0', 9600)
-while ser.in_waiting:
-    
-  print "Data is comming"
+while True:
 
   line = ser.readline()
 
-  values = line.split("|")
+  if line:
 
-  temp = values[1]
+    print "Data is comming"
+    
+    values = line.split("|")
 
-  humidity = values[0]
+    temp = values[1]
 
-  date = datetime.datetime.now()
+    humidity = values[0]
 
-  date_string = date.strftime("%Y-%m-%d %H:%M")
+    date = datetime.datetime.now()
 
-  sql = "INSERT INTO temperature (value, date) VALUES (%s, %s)"
-  val = (temp, date_string)
-  mycursor.execute(sql, val)
+    date_string = date.strftime("%Y-%m-%d %H:%M")
 
-  sql = "INSERT INTO humidity (value, date) VALUES (%s, %s)"
-  val = (humidity, date_string) 
-  mycursor.execute(sql, val)
+    sql = "INSERT INTO temperature (value, date) VALUES (%s, %s)"
+    val = (temp, date_string)
+    mycursor.execute(sql, val)
+
+    sql = "INSERT INTO humidity (value, date) VALUES (%s, %s)"
+    val = (humidity, date_string) 
+    mycursor.execute(sql, val)
