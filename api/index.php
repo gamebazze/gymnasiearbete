@@ -16,5 +16,5 @@ if ($result->num_rows > 0) {
     }
 }
 
-header("Content-type:json/text");
+header("Content-Type: application/json");
 return json_encode(array('data' => $temperatures));
