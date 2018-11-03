@@ -4,9 +4,9 @@ import datetime
 
 mydb = mysql.connector.connect(
   host="localhost",
-  user="pi",
-  passwd="raspberry",
-  database="wheater_station"
+  user="klass6",
+  passwd="klass6",
+  database="test_wheater_station"
 )
 mycursor = mydb.cursor()
 
