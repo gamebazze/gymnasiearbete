@@ -11,11 +11,16 @@ mydb = mysql.connector.connect(
 mycursor = mydb.cursor()
 
 ser = serial.Serial('/dev/ttyACM1', 9600)
+
 while True:
 
   line = ser.readline()
 
   if line:
+
+    whenValue = "Values incoming"
+
+    print(whenValue)
 
     values = line.split("|")
 

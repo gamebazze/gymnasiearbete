@@ -1,7 +1,9 @@
 <?php 
 require_once "../includes/database.php";
 
-$sql = "SELECT * FROM temperature";
+$date = date("Y-m-d");
+
+$sql = "SELECT date, AVG(value) AS value FROM temperature WHERE date BETWEEN '2018-08-29' AND '2018-08-30' GROUP BY date";
 $result = $conn->query($sql);
 
 $temperatures = array();
@@ -11,12 +13,12 @@ if ($result->num_rows > 0) {
     while($row = $result->fetch_assoc()) {
         $temperatures[] = array(
             'value' => $row['value'],
-            'date' => $row['date']
+            'date' => date( "Y-m-d", strtotime( $row['date']) )
         );
     }
 }
 
-$sql = "SELECT * FROM humidity";
+$sql = "SELECT date, AVG(value) AS value FROM humidity WHERE date BETWEEN '2018-08-29' AND '2018-08-30' GROUP BY date";
 $result = $conn->query($sql);
 
 $humidity = array();
