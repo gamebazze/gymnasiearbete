@@ -22,7 +22,7 @@ switch($action){
 
         $date = date("Y-m-d");
 
-        $sql = "SELECT date, AVG(value) AS value FROM temperature WHERE date BETWEEN '$_GET[first_date]' AND '$_GET[last_date]' GROUP BY date";
+        $sql = "SELECT date, AVG(value) AS value FROM temperature WHERE date BETWEEN '$_GET[first_date]' AND DATEADD(day,1,'$_GET[last_date]') GROUP BY date";
         $result = $conn->query($sql);
 
         $temperatures = array();
@@ -71,7 +71,7 @@ switch($action){
                 $date = new DateTime($row['date']);
                 $title = $date->format("Y V. W");
 
-                $weeks[$title][] = $row['date'];
+                $weeks[$title][] = date( "Y-m-d", strtotime( $row['date']) );
             }
         }
 
