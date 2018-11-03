@@ -11,21 +11,21 @@ class Chart{
         this.valueSteps = 2;
     }
 
-    add_data(data){
+    addData(data){
         var obj  = JSON.parse(data);
         this.data = obj.data;
         this.spacesX = this.data.length + 1;    
         this.cutOffStepsPx = this.cutOffHeight / 9;
         this.leftMargin = this.margin * 3;
 
-        this.calc_highest_lowest()
+        this.calcHighestLowest()
     }
 
     init(){
         this.render()
     }
 
-    calc_highest_lowest(){
+    calcHighestLowest(){
         if(!this.data){ 
             console.log("data variable is empty!")
             return;
@@ -94,9 +94,14 @@ class Chart{
             this.ctx.strokeText(String(this.data[i-1].value), x + 10, y - 10);
         }
 
+    }
 
-        
+    update (data){
+        this.ctx.clearRect(0, 0, this.width, this.height);
 
+        this.addData(data);
+
+        this.render();
     }
 
 

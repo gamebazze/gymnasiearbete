@@ -10,7 +10,7 @@ mydb = mysql.connector.connect(
 )
 mycursor = mydb.cursor()
 
-ser = serial.Serial('/dev/ttyACM1', 9600)
+ser = serial.Serial('/dev/ttyACM0', 9600)
 
 while True:
 

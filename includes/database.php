@@ -1,8 +1,8 @@
 <?php
 $servername = "localhost";
-$username = "pi";
-$password = "raspberry";
-$dbname = "wheater_station";
+$username = "klass6";
+$password = "klass6";
+$dbname = "test_wheater_station";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
