@@ -1,4 +1,4 @@
-import serial
+from seiral import Serial
 import mysql.connector
 import datetime
 
