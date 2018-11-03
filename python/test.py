@@ -16,6 +16,8 @@ while True:
 
   line = ser.readline()
 
+  print(line)
+
   if line:
 
     whenValue = "Values incoming"
