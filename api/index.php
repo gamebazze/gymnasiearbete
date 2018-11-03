@@ -22,7 +22,7 @@ switch($action){
 
         $date = date("Y-m-d");
 
-        $sql = "SELECT date, AVG(value) AS value FROM temperature WHERE date BETWEEN '$_GET[first_date]' AND DATEADD(day,1,'$_GET[last_date]') GROUP BY date";
+        $sql = "SELECT date, AVG(value) AS value FROM temperature WHERE date BETWEEN '$_GET[first_date]' AND DATE_ADD('$_GET[last_date]', INTERVAL 1 DAY) GROUP BY date";
         $result = $conn->query($sql);
 
         $temperatures = array();
@@ -37,7 +37,7 @@ switch($action){
             }
         }
 
-        $sql = "SELECT date, AVG(value) AS value FROM humidity WHERE date BETWEEN '$_GET[first_date]' AND '$_GET[last_date]' GROUP BY date";
+        $sql = "SELECT date, AVG(value) AS value FROM humidity WHERE date BETWEEN '$_GET[first_date]' AND DATE_ADD('$_GET[last_date]', INTERVAL 1 DAY) GROUP BY date";
         $result = $conn->query($sql);
 
         $humidity = array();
@@ -60,7 +60,7 @@ switch($action){
 
         $weeks = array();
 
-        $sql = "SELECT date FROM temperature GROUP BY date";
+        $sql = "SELECT date FROM temperature";
         $result = $conn->query($sql);
 
         $humidity = array();
@@ -71,7 +71,7 @@ switch($action){
                 $date = new DateTime($row['date']);
                 $title = $date->format("Y V. W");
 
-                $weeks[$title][] = date( "Y-m-d", strtotime( $row['date']) );
+                $weeks[$title][] = $row['date'];
             }
         }
 
