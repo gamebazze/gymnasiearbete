@@ -100,7 +100,7 @@ switch($action){
         
         $years = array();
 
-        $sql = "SELECT DATE_FORMAT(date, '%Y') FROM temperature GROUP BY DATE_FORMAT(date, '%Y')";
+        $sql = "SELECT DATE_FORMAT(date, '%Y') AS date FROM temperature GROUP BY DATE_FORMAT(date, '%Y')";
         $result = $conn->query($sql);
 
         if ($result->num_rows > 0) {
