@@ -113,6 +113,25 @@ switch($action){
         http_response_code (200);
         echo "'" . json_encode(array('years' => $years)) . "'";
         return;
+
+    case "get_months":
+        
+        $months = array();
+
+        $sql = "SELECT DATE_FORMAT(date, '%m') AS date FROM temperature WHERE date LIKE '$GET[year]' GROUP BY DATE_FORMAT(date, '%m')";
+        $result = $conn->query($sql);
+
+        if ($result->num_rows > 0) {
+            // output data of each row
+            while($row = $result->fetch_assoc()) {
+                $months[] = $row['date'];
+            }
+        }
+
+        http_response_code (200);
+        echo "'" . json_encode(array('months' => $months)) . "'";
+        return;
+    
 }
 
 
