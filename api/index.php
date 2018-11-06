@@ -63,8 +63,6 @@ switch($action){
         $sql = "SELECT date FROM temperature";
         $result = $conn->query($sql);
 
-        $humidity = array();
-
         if ($result->num_rows > 0) {
             // output data of each row
             while($row = $result->fetch_assoc()) {
@@ -98,6 +96,23 @@ switch($action){
         echo "'" . json_encode(array('weeks' => $weeks)) . "'";
         return;
 
+    case "get_years":
+        
+        $years = array();
+
+        $sql = "SELECT DATE_FORMAT(date, '%Y') FROM temperature GROUP BY DATE_FORMAT(date, '%Y')";
+        $result = $conn->query($sql);
+
+        if ($result->num_rows > 0) {
+            // output data of each row
+            while($row = $result->fetch_assoc()) {
+                $years[] = $row['date'];
+            }
+        }
+
+        http_response_code (200);
+        echo "'" . json_encode(array('years' => $years)) . "'";
+        return;
 }
 
 
