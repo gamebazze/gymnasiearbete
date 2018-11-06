@@ -107,6 +107,7 @@ switch($action){
             // output data of each row
             while($row = $result->fetch_assoc()) {
                 $years[] = $row['date'];
+                var_dump($row);
             }
         }
 
