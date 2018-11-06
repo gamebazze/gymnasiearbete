@@ -7,14 +7,26 @@
     <body>
         <h1>Wheater Station</h1>
         <form>
+            <select name="resolution">
+                <option>Upplösning</option>
+                <option name="week">Vecka</option>
+                <option name="day">Dag</option>
+                <option name="hour">Timme</option>
+            </select>
             <select name="week">
-                <option value="35">Vecka 35</option>
+                <option>Vecka</option>
+            </select>
+            <select name="day">
+                <option>Dag</option>
+            </select>
+            <select name="hour">
+                <option>Timme</option>
             </select>
             <input type="submit" value="Visa">
         </form>
         <canvas id="myGraph" width="600" height="400"></canvas>
         <script>
-            data = '{"data":[{"value":18}, {"value":23}, {"value":27}, {"value":28}, {"value":23}, {"value":21}, {"value":29}, {"value":25}, {"value":28}]}';
+            data = '{"data":[{"value":16, "date":"2018-11-04"}, {"value":23, "date":"2018-11-05"}, {"value":27, "date":"2018-11-06"}, {"value":28, "date":"2018-11-07"}, {"value":23, "date":"2018-11-08"}, {"value":21, "date":"2018-11-04"}, {"value":29, "date":"2018-11-04"}, {"value":25, "date":"2018-11-04"}, {"value":28, "date":"2018-11-04"}]}';
             var chart = new Chart(document.getElementById("myGraph"));
             chart.addData(data);
             chart.init();

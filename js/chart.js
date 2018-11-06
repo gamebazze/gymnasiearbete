@@ -9,6 +9,7 @@ class Chart{
         this.margin = 20;
         this.cutOffHeight = 40;
         this.valueSteps = 2;
+        this.leftMargin = this.margin * 3;
     }
 
     addData(data){
@@ -16,7 +17,7 @@ class Chart{
         this.data = obj.data;
         this.spacesX = this.data.length + 1;    
         this.cutOffStepsPx = this.cutOffHeight / 9;
-        this.leftMargin = this.margin * 3;
+        
 
         this.calcHighestLowest()
     }
@@ -53,26 +54,26 @@ class Chart{
 
         this.spacesY = Math.floor((highest - lowest) / this.valueSteps) + 2;
         this.offsetY = Math.floor(lowest / 2) * 2;
-        this.spacesYPx = (this.height - 2 * this.margin) / this.spacesY;
+        this.spacesYPx = (this.height - 4 * this.margin) / this.spacesY;
         this.spacesXPx = (this.width - this.leftMargin) / this.spacesX;
     }
 
     render(){
 
         this.ctx.moveTo(this.leftMargin, 0);
-        this.ctx.lineTo(this.leftMargin, this.height - this.margin - this.cutOffHeight);
+        this.ctx.lineTo(this.leftMargin, this.height - (3 * this.margin) - this.cutOffHeight);
         for(let i = 0; i < 9; i++){
             if(i & 1){
             // ODD
-            this.ctx.lineTo(this.leftMargin - 4, this.height - this.margin - this.cutOffHeight + (i + 1) * this.cutOffStepsPx);
+            this.ctx.lineTo(this.leftMargin - 4, this.height - (3 * this.margin) - this.cutOffHeight + (i + 1) * this.cutOffStepsPx);
             }
             else{
             // EVEN
-            this.ctx.lineTo(this.leftMargin + 4, this.height - this.margin - this.cutOffHeight + (i + 1) * this.cutOffStepsPx);
+            this.ctx.lineTo(this.leftMargin + 4, this.height - (3 * this.margin) - this.cutOffHeight + (i + 1) * this.cutOffStepsPx);
             }
         }
 
-        this.ctx.lineTo(this.width - this.margin, this.height - this.margin);
+        this.ctx.lineTo(this.width - this.margin, this.height - (3 * this.margin));
         this.ctx.stroke();
 
         //Grace the graph
@@ -92,6 +93,17 @@ class Chart{
             this.ctx.arc( x, y, 4, 0, 2*Math.PI);
             this.ctx.stroke();
             this.ctx.strokeText(String(this.data[i-1].value), x + 10, y - 10);
+
+            this.ctx.save();
+
+            var moveX = Math.sin(Math.PI / 4) * this.ctx.measureText(String(this.data[i-1].date)).width;
+
+            this.ctx.translate(x - moveX, this.height );
+            this.ctx.rotate(-Math.PI / 4);
+            this.ctx.strokeText(String(this.data[i-1].date), 0, 0);
+            console.log("x:" + x + " y:" + (this.height - this.cutOffHeight));
+
+            this.ctx.restore();
         }
 
     }
