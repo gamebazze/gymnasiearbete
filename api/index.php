@@ -93,7 +93,7 @@ switch($action){
 
         }
         http_response_code (200);
-        echo "'" . json_encode(array('weeks' => $weeks)) . "'";
+        echo json_encode(array('weeks' => $weeks));
         return;
 
     case "get_years":
@@ -111,14 +111,14 @@ switch($action){
         }
 
         http_response_code (200);
-        echo "'" . json_encode(array('years' => $years)) . "'";
+        echo json_encode(array('years' => $years));
         return;
 
     case "get_months":
         
         $months = array();
 
-        $sql = "SELECT DATE_FORMAT(date, '%m') AS date FROM temperature WHERE date LIKE '$GET[year]' GROUP BY DATE_FORMAT(date, '%m')";
+        $sql = "SELECT DATE_FORMAT(date, '%m') AS date FROM temperature WHERE date BETWEEN '$_GET[year]-01-01' AND '$_GET[year]-12-31' GROUP BY DATE_FORMAT(date, '%m')";
         $result = $conn->query($sql);
 
         if ($result->num_rows > 0) {
@@ -129,7 +129,25 @@ switch($action){
         }
 
         http_response_code (200);
-        echo "'" . json_encode(array('months' => $months)) . "'";
+        echo json_encode(array('months' => $months));
+        return;
+
+    case "get_days":
+        
+        $days = array();
+
+        $sql = "SELECT DATE_FORMAT(date, '%d') AS date FROM temperature WHERE date BETWEEN '$_GET[year]-$_GET[month]-01' AND '$_GET[year]-$_GET[month]-31'  GROUP BY DATE_FORMAT(date, '%d')";
+        $result = $conn->query($sql);
+
+        if ($result->num_rows > 0) {
+            // output data of each row
+            while($row = $result->fetch_assoc()) {
+                $days[] = $row['date'];
+            }
+        }
+
+        http_response_code (200);
+        echo json_encode(array('days' => $days));
         return;
     
 }
