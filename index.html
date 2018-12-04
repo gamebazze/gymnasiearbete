@@ -10,9 +10,9 @@
         <form>
             <select id="resolution" name="resolution">
                 <option>Upplösning</option>
-                <option name="week">Vecka</option>
-                <option name="day">Dag</option>
-                <option name="hour">Timme</option>
+                <option value="week">Vecka</option>
+                <option value="day">Dag</option>
+                <option value="hour">Timme</option>
             </select>
             <select id="year" name="year" style="display: none;"></select>
             <select id="month" name="month" style="display: none;"></select>
@@ -21,13 +21,9 @@
             <select id="hour" name="hour" style="display: none;"></select>
             <input type="submit" value="Visa">
         </form>
-        <canvas id="myGraph" width="600" height="400"></canvas>
-        <script>
-            data = '{"data":[{"value":16, "date":"2018-11-04"}, {"value":23, "date":"2018-11-05"}, {"value":27, "date":"2018-11-06"}, {"value":28, "date":"2018-11-07"}, {"value":23, "date":"2018-11-08"}, {"value":21, "date":"2018-11-04"}, {"value":29, "date":"2018-11-04"}, {"value":25, "date":"2018-11-04"}, {"value":28, "date":"2018-11-04"}]}';
-            var chart = new Chart(document.getElementById("myGraph"));
-            chart.addData(data);
-            chart.init();
-            console.log(chart);
-        </script>
+        <h2>Temperature Graph</h2>
+        <canvas id="temperature-graph" width="600" height="400"></canvas>
+        <h2>Humidity Graph</h2>
+        <canvas id="humidity-graph" width="600" height="400"></canvas>
         <script src="js/script.js"></script>
     </body>

@@ -13,8 +13,7 @@ class Chart{
     }
 
     addData(data){
-        var obj  = JSON.parse(data);
-        this.data = obj.data;
+        this.data = data;
         this.spacesX = this.data.length + 1;    
         this.cutOffStepsPx = this.cutOffHeight / 9;
         
@@ -59,7 +58,7 @@ class Chart{
     }
 
     render(){
-
+        this.ctx.beginPath();
         this.ctx.moveTo(this.leftMargin, 0);
         this.ctx.lineTo(this.leftMargin, this.height - (3 * this.margin) - this.cutOffHeight);
         for(let i = 0; i < 9; i++){
@@ -75,6 +74,7 @@ class Chart{
 
         this.ctx.lineTo(this.width - this.margin, this.height - (3 * this.margin));
         this.ctx.stroke();
+        this.ctx.closePath();
 
         //Grace the graph
         this.ctx.font = "12px Arial";
@@ -85,13 +85,13 @@ class Chart{
         }  
         
         for(let i = 1; i <= this.data.length; i++){ 
-            console.log(this.data[i - 1].value);
             var x = this.leftMargin + i  * this.spacesXPx;
             var y = this.margin + ( (this.spacesYPx / this.valueSteps)  * (this.spacesY * this.valueSteps - (this.data[i - 1].value - this.offsetY + this.valueSteps) ) );
-            console.log("x:" + x + " y:" + y);
+
             this.ctx.beginPath(); 
             this.ctx.arc( x, y, 4, 0, 2*Math.PI);
             this.ctx.stroke();
+            this.ctx.closePath();
             this.ctx.strokeText(String(this.data[i-1].value), x + 10, y - 10);
 
             this.ctx.save();
@@ -101,7 +101,7 @@ class Chart{
             this.ctx.translate(x - moveX, this.height );
             this.ctx.rotate(-Math.PI / 4);
             this.ctx.strokeText(String(this.data[i-1].date), 0, 0);
-            console.log("x:" + x + " y:" + (this.height - this.cutOffHeight));
+            
 
             this.ctx.restore();
         }
@@ -109,9 +109,18 @@ class Chart{
     }
 
     update (data){
+        // Store the current transformation matrix
+        this.ctx.save();
+
+        // Use the identity matrix while clearing the canvas
+        this.ctx.setTransform(1, 0, 0, 1, 0, 0);
         this.ctx.clearRect(0, 0, this.width, this.height);
 
+        this.ctx.restore();
+
         this.addData(data);
+
+        this.ctx.clearRect(0, 0, this.width, this.height);
 
         this.render();
     }

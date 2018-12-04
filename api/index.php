@@ -6,23 +6,27 @@ header("Content-Type: application/json");
 
 if( !isset($_GET['action']) ){
     http_response_code (400);
-    echo "'" . json_encode( array('error' => "No action specified") ) . "'";
+    echo json_encode( array('error' => "No action specified") );
     return;
 }
 $action = $_GET['action'];
 
 switch($action){
-    case "get_between":
+    case "get_week":
 
-        if(!isset($_GET['first_date']) && !isset($_GET['last_date'])) {
+        if(!isset($_GET['week']) || !isset($_GET['year'])) {
             http_response_code (400);
-            echo "'" . json_encode( array('error' => "You need to specify dates") ) . "'";
+            echo json_encode( array('error' => "You need to specify week and year") );
             return;
         }
 
-        $date = date("Y-m-d");
+        $year = $_GET['year'];
+        $week = $_GET['week']; 
 
-        $sql = "SELECT date, AVG(value) AS value FROM temperature WHERE date BETWEEN '$_GET[first_date]' AND DATE_ADD('$_GET[last_date]', INTERVAL 1 DAY) GROUP BY date";
+        $from = date("Y-m-d", strtotime("{$year}-W{$week}-1")); //Returns the date of monday in week
+        $to = date("Y-m-d", strtotime("{$year}-W{$week}-7"));   //Returns the date of sunday in week
+
+        $sql = "SELECT DATE_FORMAT(date, '%Y-%m-%d') AS date, AVG(value) AS value FROM temperature WHERE date BETWEEN '$from' AND DATE_ADD('$to', INTERVAL 1 DAY) GROUP BY DATE_FORMAT(date, '%Y-%m-%d')";
         $result = $conn->query($sql);
 
         $temperatures = array();
@@ -37,7 +41,7 @@ switch($action){
             }
         }
 
-        $sql = "SELECT date, AVG(value) AS value FROM humidity WHERE date BETWEEN '$_GET[first_date]' AND DATE_ADD('$_GET[last_date]', INTERVAL 1 DAY) GROUP BY date";
+        $sql = "SELECT DATE_FORMAT(date, '%Y-%m-%d') as date, AVG(value) AS value FROM humidity WHERE date BETWEEN '$from' AND DATE_ADD('$to', INTERVAL 1 DAY) GROUP BY DATE_FORMAT(date, '%Y-%m-%d')";
         $result = $conn->query($sql);
 
         $humidity = array();
@@ -52,7 +56,7 @@ switch($action){
             }
         }
         http_response_code (200);
-        echo "'" . json_encode(array('temperatures' => $temperatures, 'humidity' => $humidity)) . "'";
+        echo json_encode(array('temperatures' => $temperatures, 'humidity' => $humidity));
 
         return;
 
@@ -60,38 +64,16 @@ switch($action){
 
         $weeks = array();
 
-        $sql = "SELECT date FROM temperature";
+        $sql = "SELECT DATE_FORMAT(date, '%v') AS date FROM temperature WHERE date BETWEEN '$_GET[year]-01-01' AND '$_GET[year]-12-31' GROUP BY DATE_FORMAT(date, '%v')";
         $result = $conn->query($sql);
 
         if ($result->num_rows > 0) {
             // output data of each row
             while($row = $result->fetch_assoc()) {
-                $date = new DateTime($row['date']);
-                $title = $date->format("Y V. W");
-
-                $weeks[$title][] = $row['date'];
+                $weeks[] = $row['date'];
             }
         }
 
-        foreach($weeks as $title => $week){
-            $first_date = $week[0];
-            $last_date = $week[0];
-
-            foreach($week as $date){
-                if(strtotime($date) < strtotime($first_date)){
-                    $first_date = $date;
-                }
-                if(strtotime($date) > strtotime($last_date)){
-                    $last_date = $date;
-                }
-            }
-
-            $weeks[$title] = array(
-                'firstDate' => $first_date,
-                'lastDate' => $last_date,
-            );
-
-        }
         http_response_code (200);
         echo json_encode(array('weeks' => $weeks));
         return;
