@@ -60,6 +60,52 @@ switch($action){
 
         return;
 
+    case "get_day":
+
+        if(!isset($_GET['month']) || !isset($_GET['year']) || !isset($_GET['day'])) {
+            http_response_code (400);
+            echo json_encode( array('error' => "You need to specify year, month and day") );
+            return;
+        }
+
+        $year = $_GET['year'];
+        $month = $_GET['month']; 
+        $day = $_GET['day'];
+
+        $sql = "SELECT DATE_FORMAT(date, '%Y-%m-%d %H') AS date, AVG(value) AS value FROM temperature WHERE date BETWEEN '$year-$month-$day' AND DATE_ADD('$year-$month-$day', INTERVAL 1 DAY) GROUP BY DATE_FORMAT(date, '%Y-%m-%d %H')";
+        $result = $conn->query($sql);
+
+        $temperatures = array();
+
+        if ($result->num_rows > 0) {
+            // output data of each row
+            while($row = $result->fetch_assoc()) {
+                $temperatures[] = array(
+                    'value' => $row['value'],
+                    'date' => date('H:00',strtotime($row['date'] . ":00")),
+                );
+            }
+        }
+
+        $sql = "SELECT DATE_FORMAT(date, '%Y-%m-%d %H') AS date, AVG(value) AS value FROM humidity WHERE date BETWEEN '$year-$month-$day' AND DATE_ADD('$year-$month-$day', INTERVAL 1 DAY) GROUP BY DATE_FORMAT(date, '%Y-%m-%d %H')";
+        $result = $conn->query($sql);
+
+        $humidity = array();
+
+        if ($result->num_rows > 0) {
+            // output data of each row
+            while($row = $result->fetch_assoc()) {
+                $humidity[] = array(
+                    'value' => $row['value'],
+                    'date' => date('H:00',strtotime($row['date'] . ":00")),
+                );
+            }
+        }
+        http_response_code (200);
+        echo json_encode(array('temperatures' => $temperatures, 'humidity' => $humidity));
+
+        return;
+
     case "get_weeks":
 
         $weeks = array();

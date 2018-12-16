@@ -3,14 +3,12 @@ var selectYear =  document.getElementById("year");
 var selectMonth = document.getElementById("month");
 var selectWeek = document.getElementById("week");
 var selectDay = document.getElementById("day");
-var selectHour = document.getElementById("hour");
 
 var currentResolution;
 var currentYear;
 var currentMonth;
 var currentWeek;
 var currentDay;
-var currentHour;
 
 let t;
 
@@ -23,7 +21,6 @@ selectResolution.addEventListener("change", function(){
     selectMonth.style.display = "none";
     selectWeek.style.display = "none";
     selectDay.style.display = "none";
-    selectHour.style.display = "none";
 
     if(selectYear.options.length <= 0){
         t  = document.createElement("option");
@@ -56,15 +53,14 @@ selectResolution.addEventListener("change", function(){
 selectYear.addEventListener("change", function(){
     currentYear = this.options[this.selectedIndex].value;
 
-    console.log("Change");
 
     switch(currentResolution){
         case "week":
-            selectWeek.options = null;
+            $(selectWeek).empty();
             t  = document.createElement("option");
-            t.text = "Månad";
+            t.text = "Vecka";
     
-            selectMonth.add(t);
+            selectWeek.add(t);
             
             $.ajax("api/?action=get_weeks&year=" + currentYear)
             .done(function(responseText){
@@ -82,7 +78,7 @@ selectYear.addEventListener("change", function(){
             })
             break;
         default: 
-            selectMonth.options = null;
+            $(selectMonth).empty();
             t  = document.createElement("option");
             t.text = "Månad";
     
@@ -109,31 +105,26 @@ selectYear.addEventListener("change", function(){
 selectMonth.addEventListener("change", function(){
     currentMonth = this.options[this.selectedIndex].value;
 
-    if(selectDay.options.length <= 0){
-        t  = document.createElement("option");
-        t.text = "Dag";
+    $(selectDay).empty();
+    t  = document.createElement("option");
+    t.text = "Dag";
 
-        selectDay.add(t);
-        
-        $.ajax("api/?action=get_days&year=" + currentYear + "&month=" + currentMonth)
-        .done(function(responseText){
-            var days = responseText.days;
+    selectDay.add(t);
+    
+    $.ajax("api/?action=get_days&year=" + currentYear + "&month=" + currentMonth)
+    .done(function(responseText){
+        var days = responseText.days;
 
-            console.log(days);
+        for(let i = 0; i < days.length; i++){
+            var temp = document.createElement("option");
 
-            for(let i = 0; i < days.length; i++){
-                var temp = document.createElement("option");
+            temp.text = days[i];
+            temp.value = days[i];
 
-                temp.text = days[i];
-                temp.value = days[i];
-
-                selectDay.add(temp);
-            }
-            selectDay.style.display = "";
-        })
-
-        
-    }
+            selectDay.add(temp);
+        }
+        selectDay.style.display = "";
+    })
     
 })
 
@@ -142,6 +133,22 @@ selectWeek.addEventListener("change", function(){
 
         
     $.ajax("api/?action=get_week&year=" + currentYear + "&week=" + currentWeek)
+    .done(function(responseText){
+        var temperatures = responseText.temperatures;
+        var humidity = responseText.humidity;
+
+        temperatureChart.update(temperatures);
+        humidityChart.update(humidity);
+    
+    })
+    
+})
+
+selectDay.addEventListener("change", function(){
+    currentDay = this.options[this.selectedIndex].value;
+
+        
+    $.ajax("api/?action=get_day&year=" + currentYear + "&month=" + currentMonth + "&day=" + currentDay)
     .done(function(responseText){
         var temperatures = responseText.temperatures;
         var humidity = responseText.humidity;
