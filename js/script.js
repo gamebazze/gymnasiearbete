@@ -22,31 +22,30 @@ selectResolution.addEventListener("change", function(){
     selectWeek.style.display = "none";
     selectDay.style.display = "none";
 
-    if(selectYear.options.length <= 0){
-        t  = document.createElement("option");
-        t.text = "År";
+    $(selectYear).empty();
+    t  = document.createElement("option");
+    t.text = "År";
 
-        selectYear.add(t);
+    selectYear.add(t);
+    
+    $.ajax("api/?action=get_years")
+    .done(function(responseText){
+        var years = responseText.years;
+
+        for(let i = 0; i < years.length; i++){
+            var temp = document.createElement("option");
+
+            var d = new Date(years[i]);
+
+            temp.text = d.getFullYear();
+            temp.value = d.getFullYear();
+
+            selectYear.add(temp);
+        }
+        selectYear.style.display = "";
+    })
+
         
-        $.ajax("api/?action=get_years")
-        .done(function(responseText){
-            var years = responseText.years;
-
-            for(let i = 0; i < years.length; i++){
-                var temp = document.createElement("option");
-
-                var d = new Date(years[i]);
-
-                temp.text = d.getFullYear();
-                temp.value = d.getFullYear();
-
-                selectYear.add(temp);
-            }
-            selectYear.style.display = "";
-        })
-
-        
-    }
     
 })
 

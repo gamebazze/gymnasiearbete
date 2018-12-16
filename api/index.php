@@ -35,7 +35,7 @@ switch($action){
             // output data of each row
             while($row = $result->fetch_assoc()) {
                 $temperatures[] = array(
-                    'value' => $row['value'],
+                    'value' => round($row['value'], 2),
                     'date' => date( "Y-m-d", strtotime( $row['date']) )
                 );
             }
@@ -50,8 +50,8 @@ switch($action){
             // output data of each row
             while($row = $result->fetch_assoc()) {
                 $humidity[] = array(
-                    'value' => $row['value'],
-                    'date' => $row['date']
+                    'value' => round($row['value'], 2),
+                    'date' => date( "Y-m-d", strtotime( $row['date']) )
                 );
             }
         }
@@ -81,7 +81,7 @@ switch($action){
             // output data of each row
             while($row = $result->fetch_assoc()) {
                 $temperatures[] = array(
-                    'value' => $row['value'],
+                    'value' => round($row['value'], 2),
                     'date' => date('H:00',strtotime($row['date'] . ":00")),
                 );
             }
@@ -96,7 +96,7 @@ switch($action){
             // output data of each row
             while($row = $result->fetch_assoc()) {
                 $humidity[] = array(
-                    'value' => $row['value'],
+                    'value' => round($row['value'], 2),
                     'date' => date('H:00',strtotime($row['date'] . ":00")),
                 );
             }
