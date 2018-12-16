@@ -12,6 +12,8 @@ mycursor = mydb.cursor()
 
 ser = serial.Serial('/dev/ttyACM0', 9600)
 
+print("Script started")
+
 while True:
 
   line = ser.readline()
