@@ -6,7 +6,7 @@ mydb = mysql.connector.connect(
   host="localhost",
   user="klass6",
   passwd="klass6",
-  database="whether_station"
+  database="weather_station"
 )
 mycursor = mydb.cursor()
 
